@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ricky</title>
+    <!--css-->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <!--css-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/constant.js"></script>
+    <!--search jQuery-->
+    <script src="js/main.js"></script>
+    <!--search jQuery-->
+
+    <!--mycart-->
+    <script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+    <!-- cart -->
+    <script src="js/simpleCart.min.js"></script>
+    <!-- cart -->
+</head>
+<body>
+<!--header-->
+<div class="header">
+</div>
+<!--header-->
+<!--banner-->
+<div class="banner1">
+    <div class="container">
+        <h3><a href="index.html">Home</a> / <span>Checkout</span></h3>
+    </div>
+</div>
+<!--banner-->
+
+<!--content-->
+<div class="content">
+    <div class="cart-items">
+        <div class="container">
+            <div class="col-md-9 cart-total" id="cartS">
+            </div>
+            <div>
+                <div class="col-md-3 cart-total">
+                    <a class="continue" href="products.html">Continue to basket</a>
+                    <div class="price-details" style="padding-bottom: 40px">
+                        <h3>Countdown</h3>
+                        <span>Total</span>
+                        <span class="total1"></span>
+                    </div>
+                    <br>
+                    <div class="price-details" style="padding-bottom: 40px">
+                        <h3>Pak'nSave</h3>
+                        <span>Total</span>
+                        <span class="total2"></span>
+                    </div>
+                    <br>
+                    <div class="price-details" style="padding-bottom: 40px">
+                        <h3>New World</h3>
+                        <span>Total</span>
+                        <span class="total3"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- checkout -->
+    </div>
+    <!---footer--->
+    <div class="footer-w3l">
+    </div>
+    <!---footer--->
+    <!--copy-->
+    <div class="copy-section">
+    </div>
+    <!--copy-->
+    <script>
+        $(function () {
+            $(".header").load("header.html");
+            $(".footer-w3l").load("footer.html");
+            $(".copy-section").load("section.html");
+        });
+        var aT = bT = cT = 0
+        $(function () {
+            isToken();
+
+            function isToken() {
+                if (token != '') {
+                    $("#userinfo").html("account:" + localStorage.getItem('email'))
+                    $("#logout").css('display', 'block')
+                }
+            }
+
+
+            var aa = '<h2>My Shopping Bag</h2>';
+            postAjax(API_URL + "/action/Cart.php?action=getAll", {user_id: token}, function (data) {
+                var data = data.data;
+                if (data) {
+                    $.each(data, function (i, dom) {
+                        aa += '<div class="cart-header">\n' +
+                            '                <div class="close1" onclick="closeAA(' + i + ')"></div>\n' +
+                            '                <div class="cart-sec simpleCart_shelfItem">\n' +
+                            '                    <div class="cart-item cyc">\n' +
+                            '                        <img src="' + dom['cover'] + '" class="img-responsive" alt=""/>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="cart-item-info">\n' +
+                            '                        <h3><a href="single.html">' + dom['name'] + '</a></h3>\n';
+                        $.each(dom['supermarket'], function (i11, dom11) {
+                            switch (i11) {
+                                case 0:
+                                    at1 = parseFloat(dom11['price']) * dom['supermarket'][0]['count'];
+                                    aT += at1;
+                                    break;
+                                case 1:
+                                    bt1 = parseFloat(dom11['price']) * dom['supermarket'][0]['count'];
+                                    bT += bt1;
+                                    break;
+                                case 2:
+                                    ct1 = parseFloat(dom11['price']) * dom['supermarket'][0]['count'];
+                                    cT += ct1;
+                                    break;
+                            }
+                            aa += '                        <ul class="qty">\n' +
+                                '                            <li><p>' + dom11['name'] + '</p></li>\n' +
+                                '                            <li><p>' + dom11['price'] + '</p></li>\n' +
+                                '                        </ul>\n';
+
+
+                        })
+
+                        aa += '<div class="row">\n' +
+                            '   <div class="col-lg-4">\n' +
+                            '       <div class="input-group">\n' +
+                            '           <span class="input-group-btn">\n' +
+                            '           <button class="btn btn-default" type="button" id="Minus">-</button>\n' +
+                            '           </span>\n' +
+                            '           <input type="text" class="form-control" id="catCount" value="' + dom['supermarket'][0]['count'] + '"  data-id="' + i + '">' +
+                            '           <span class="input-group-btn">\n' +
+                            '           <button class="btn btn-default" type="button" id="Added">+</button>\n' +
+                            '           </span>\n' +
+                            '       </div>' +
+                            '   </div>\n' +
+                            ' </div>';
+                        aa += '                    </div>\n' +
+                            '                    <div class="clearfix"></div>\n' +
+                            '\n' +
+                            '                </div>\n' +
+                            '            </div>';
+                    })
+                    $("#cartS").html(aa)
+                    $(".total1").html(aT.toFixed(2))
+                    $(".total2").html(bT.toFixed(2))
+                    $(".total3").html(cT.toFixed(2))
+                } else {
+                    aa += '';
+                    $("#cartS").html(aa)
+                    $("#cartS").html("购物车无数据")
+                }
+            }, {
+                errorFunction: errorFunction,
+                type: "get",
+            });
+
+            $(document).on('click', '#Minus', function () {
+                var catCount = $(this).parent().siblings("#catCount");
+                var id = $(this).parent().siblings("#catCount").data('id');
+                catCountVal = parseInt(catCount.val());
+                if (catCountVal == 1) {
+                    return true;
+                }
+
+                catCountVal -= 1;
+
+                postAjax(API_URL + "/action/Cart.php?action=countU&act=2", {
+                    user_id: token,
+                    id: id
+                }, function (data) {
+                    alert(data.msg);
+                    catCount.val(catCountVal);
+                    window.location.href = 'checkout.html';
+                }, {
+                    errorFunction: errorFunction,
+                });
+            })
+
+
+            $(document).on('click', '#Added', function () {
+                var catCount = $(this).parent().siblings("#catCount");
+                var id = $(this).parent().siblings("#catCount").data('id');
+                catCountVal = parseInt(catCount.val());
+                if (catCountVal == 10) {
+                    alert('The maximum amount of 10')
+                    return true;
+                }
+
+                catCountVal = catCountVal + 1;
+                console.log(catCountVal)
+
+                postAjax(API_URL + "/action/Cart.php?action=countU&act=1", {
+                    user_id: token,
+                    id: id
+                }, function (data) {
+                    alert(data.msg);
+                    catCount.val(catCountVal);
+                    window.location.href = 'checkout.html';
+                }, {
+                    errorFunction: errorFunction,
+                });
+            })
+        })
+
+        function closeAA(id) {
+            postAjax(API_URL + "/action/Cart.php?action=delCart", {user_id: token, id: id}, function (data) {
+                alert(data.msg);
+                window.location.href = 'checkout.html';
+            }, {
+                errorFunction: errorFunction,
+            });
+        }
+    </script>
+</body>
+</html>

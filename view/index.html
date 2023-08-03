@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ricky</title>
+    <!--css-->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <!--css-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/constant.js"></script>
+    <!--search jQuery-->
+    <script src="js/main.js"></script>
+    <!--search jQuery-->
+    <script src="js/responsiveslides.min.js"></script>
+    <script>
+        $(function () {
+            $("#slider").responsiveSlides({
+                auto: true,
+                nav: true,
+                speed: 500,
+                namespace: "callbacks",
+                pager: true,
+            });
+        });
+    </script>
+    <!--mycart-->
+    <script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+    <!-- cart -->
+    <script src="js/simpleCart.min.js"></script>
+    <!-- cart -->
+</head>
+<body>
+<!--header-->
+<div class="header">
+</div>
+<!--header-->
+<!--banner-->
+<div class="banner-w3">
+    <div class="demo-1">
+        <div id="example1" class="core-slider core-slider__carousel example_1">
+            <div class="core-slider_viewport">
+                <div class="core-slider_list">
+                    <div class="core-slider_item">
+                        <img src="images/b1.jpg" class="img-responsive" alt="">
+                    </div>
+                    <div class="core-slider_item">
+                        <img src="images/b2.jpg" class="img-responsive" alt="">
+                    </div>
+                    <div class="core-slider_item">
+                        <img src="images/b3.jpg" class="img-responsive" alt="">
+                    </div>
+                    <div class="core-slider_item">
+                        <img src="images/b4.jpg" class="img-responsive" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="core-slider_nav">
+                <div class="core-slider_arrow core-slider_arrow__right"></div>
+                <div class="core-slider_arrow core-slider_arrow__left"></div>
+            </div>
+            <div class="core-slider_control-nav"></div>
+        </div>
+    </div>
+    <link href="css/coreSlider.css" rel="stylesheet" type="text/css">
+    <script src="js/coreSlider.js"></script>
+    <script>
+        $('#example1').coreSlider({
+            pauseOnHover: false,
+            interval: 3000,
+            controlNavEnabled: true
+        });
+
+    </script>
+
+</div>
+<!--banner-->
+<!--content-->
+<div class="content">
+    <!--new-arrivals-->
+    <div class="new-arrivals-w3agile">
+        <div class="container">
+            <h2 class="tittle">New Arrivals</h2>
+            <div class="arrivals-grids" id="homeH">
+            </div>
+        </div>
+    </div>
+    <!--new-arrivals-->
+</div>
+<!--content-->
+<!---footer--->
+<div class="footer-w3l"></div>
+<!---footer--->
+<!--copy-->
+<div class="copy-section"></div>
+<!--copy-->
+
+<script>
+    $(function () {
+        $(".header").load("header.html");
+        $(".footer-w3l").load("footer.html");
+        $(".copy-section").load("section.html");
+
+        postAjax(API_URL + "/action/Home.php?action=Boutique", {}, function (data) {
+            var data = data.data;
+            var aa = '';
+            $.each(data, function (i, dom) {
+                aa+= '<div class="col-md-3 arrival-grid simpleCart_shelfItem">\n' +
+                    '        <div class="grid-arr">\n' +
+                    '            <div class="grid-arrival">\n' +
+                    '                <figure>\n' +
+                    '                    <a href="single.html?id='+ dom['id'] +'">\n' +
+                    '                        <div class="grid-img">\n' +
+                    '                            <img src="'+dom['cover']+'" class="img-responsive" alt="">\n' +
+                    '                        </div>\n' +
+                    '                    </a>\n' +
+                    '                </figure>\n' +
+                    '            </div>\n' +
+                    '            <div class="block">\n' +
+                    '                <div class="starbox small ghosting"></div>\n' +
+                    '            </div>\n' +
+                    '            <div class="women">\n' +
+                    '                <h6><a href="single.html?id='+ dom['id'] +'">'+dom['name']+'</a></h6>\n' +
+                    '                <p>\n' +
+                    '                    <em class="item_price">$'+dom['price']+'</em></p>\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '    </div>\n';
+            })
+
+
+
+            $("#homeH").html(aa)
+
+        }, {
+            errorFunction:errorFunction,
+            type: "get",
+        });
+
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Ricky </title>
+    <!--css-->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
+    <!--css-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="js/jquery.min.js"></script>
+    <!--search jQuery-->
+    <script src="js/main.js"></script>
+    <!--search jQuery-->
+
+    <!--mycart-->
+    <script type="text/javascript" src="js/bootstrap-3.1.1.min.js"></script>
+    <!-- cart -->
+    <script src="js/simpleCart.min.js"></script>
+    <!-- cart -->
+    <script src="js/constant.js"></script>
+</head>
+<body>
+<!--header-->
+<div class="header">
+</div>
+<!--header-->
+<!--banner-->
+<div class="banner1">
+    <div class="container">
+        <h3><a href="index.html">Home</a> / <span>Login</span></h3>
+    </div>
+</div>
+<!--banner-->
+
+<!--content-->
+<div class="content">
+    <!--login-->
+    <div class="login">
+        <div class="main-agileits">
+            <div class="form-w3agile">
+                <h3>Login </h3>
+                <form onsubmit="return false;">
+                    <div class="key">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <input type="text" value="Email" id="email" name="Email" onfocus="this.value = '';"
+                               onblur="if (this.value == '') {this.value = 'Email';}" required="">
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="key">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <input type="password" value="Password" id="password" name="Password" onfocus="this.value = '';"
+                               onblur="if (this.value == '') {this.value = 'Password';}" required="">
+                        <div class="clearfix"></div>
+                    </div>
+                    <input type="submit" value="Login" onclick="LoginF()">
+                </form>
+            </div>
+            <div class="forg">
+<!--                <a href="#" class="forg-left">Forgot Password</a>-->
+                <a href="registered.html" class="forg-right">Register</a>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!--login-->
+</div>
+<!--content-->
+<!---footer--->
+<div class="footer-w3l">
+</div>
+<!---footer--->
+<!--copy-->
+<div class="copy-section">
+</div>
+<!--copy-->
+<script>
+    $(function () {
+        $(".header").load("header.html");
+        $(".footer-w3l").load("footer.html");
+        $(".copy-section").load("section.html");
+    });
+    function LoginF() {
+        var email = $("#email").val();
+        var password = $("#password").val();
+
+        if (email == '' || password == '') {
+            alert('Password account cannot be empty');
+            return;
+        }
+
+        postAjax(API_URL + "/action/Login.php?action=login", {email:email, passwd:password}, function (data) {
+            alert(data.msg);
+            localStorage.setItem('user_id', data.data.user_id);
+            localStorage.setItem('email', data.data.name);
+            window.location.href = 'index.html';
+        }, {
+            errorFunction:errorFunction,
+        });
+    }
+</script>
+</body>
+</html>

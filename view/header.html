@@ -1,0 +1,76 @@
+  <div class="header-top">
+    <div class="container">
+      <div class="top-right">
+        <ul>
+          <li onclick="logoutU()"><a href="#">logout</a></li>
+          <li id="logout" ><a href="login.html">Login</a></li>
+          <li><a href="registered.html"> Create Account </a></li>
+        </ul>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div class="heder-bottom">
+    <div class="container">
+      <div class="logo-nav">
+        <div class="logo-nav-left">
+          <h1><a href="index.html">Ricky <span>supermarket</span></a></h1>
+        </div>
+        <div class="logo-nav-left1">
+          <nav class="navbar navbar-default">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header nav_2">
+              <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html" class="act">Home</a></li>
+                <!-- Mega Menu -->
+                <li><a href="products.html">products</a></li>
+                <li><a href="mail.html">About Us</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="logo-nav-right">
+        </div>
+        <div class="header-right2">
+          <div class="cart box_1">
+            <a href="checkout.html">
+              <h3> <div class="total">
+                (cart)</div>
+                <img src="images/bag.png" alt="" />
+              </h3>
+            </a>
+            <p><a href="javascript:;" style="color: aliceblue" id="userinfo">Empty Cart</a></p>
+            <div class="clearfix"> </div>
+          </div>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+
+      isToken();
+      function isToken() {
+        if (token != '') {
+          $("#userinfo").html("account: " +  localStorage.getItem('email'))
+          $("#logout").html('')
+        }
+      }
+    })
+
+
+    function logoutU() {
+      localStorage.setItem('user_id', '');
+      window.location.href = 'index.html';
+    }
+  </script>
